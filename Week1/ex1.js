@@ -62,9 +62,9 @@ const seedDatabase = async () => {
     try {
         await execQuery(`CREATE DATABASE IF NOT EXISTS meetup`);
         await execQuery(`USE meetup`);
-execQuery(CREATE_INVITEE_TABLE);
-execQuery(CREATE_ROOM_TABLE);
-execQuery(CREATE_MEETING_TABLE);
+        execQuery(CREATE_INVITEE_TABLE);
+        execQuery(CREATE_ROOM_TABLE);
+        execQuery(CREATE_MEETING_TABLE);
 
         await Promise.all(
             invitees.map(inv => {
