@@ -1,13 +1,12 @@
 const util = require('util');
 const mysql = require('mysql');
-const dotenv = require('dotenv').config();
+require('dotenv').config();
 
 
 const con = mysql.createConnection({
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE
+    password: process.env.MYSQL_PASSWORD
 });
 
 const execQuery = util.promisify(con.query.bind(con));
@@ -22,14 +21,14 @@ const seedDatabase = async () => {
         `CREATE TABLE IF NOT EXISTS room (
            room_no INT AUTO_INCREMENT PRIMARY KEY,
            room_name VARCHAR(100),
-           floor_number INT)`;
+           floor_number SMALLINT DEFAULT NULL)`;
 
     const CREATE_MEETING_TABLE =
         `CREATE TABLE IF NOT EXISTS meeting (
          meeting_no INT AUTO_INCREMENT PRIMARY KEY,
          meeting_title VARCHAR(255),
-         starting_time DATETIME,
-         ending_time DATETIME,
+         starting_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+         ending_time DATETIME DEFAULT CURRENT_TIMESTAMP,
          room_no INT,
          FOREIGN KEY (room_no) REFERENCES room(room_no)
          )`;
@@ -65,11 +64,25 @@ const seedDatabase = async () => {
         await execQuery(`USE meetup`);
         await Promise.all([execQuery(CREATE_INVITEE_TABLE), execQuery(CREATE_ROOM_TABLE), execQuery(CREATE_MEETING_TABLE)]);
 
-        await Promise.all(invitees.map(inv => { execQuery(`INSERT INTO invitee SET ?`, inv) }));
+        await Promise.all(
+            invitees.map(inv => {
+                execQuery(`INSERT INTO invitee SET ?`, inv)
+            }
+            )
+        );
 
-        await Promise.all(rooms.map(r => { execQuery(`INSERT INTO room SET ?`, r) }));
+        await Promise.all(
+            rooms.map(r => {
+                execQuery(`INSERT INTO room SET ?`, r)
+            }
+            ));
 
-        await Promise.all(meetings.map(m => { execQuery('INSERT INTO meeting SET ?', m) }));
+        await Promise.all(
+            meetings.map(m => {
+                execQuery('INSERT INTO meeting SET ?', m)
+            }
+            )
+        );
 
         //let result = await execQuery(`SELECT * FROM meeting INNER JOIN room ON meeting.room_no = room.room_no`);
         // console.log(result);
@@ -78,7 +91,13 @@ const seedDatabase = async () => {
     } catch (err) {
         console.error('Error:', err);
     } finally {
-        con.end();
+        con.end(err => {
+            if (err) {
+                console.error('Error closing database connection', err);
+            } else {
+                console.log('Database connection closed');
+            }
+        });
     }
 
 };
