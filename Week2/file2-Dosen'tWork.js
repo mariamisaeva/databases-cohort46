@@ -1,10 +1,8 @@
 /*
 {I have a problem creating this file, and I don't know how to fix it.
-(I was trying to reuse functions from 1.keys.js But every time I get different errors like : unknown database/use database/ something with handshake "when I use main/connection/execSqlFiles". And sometimes it is wirking normal then I get errors from nowhere) I need help}
+(I was trying to reuse functions from 1.keys.js But every time I get different errors like : unknown database/use database/ something with handshake "when I use main/connection/execSqlFiles". And sometimes it is working normal then I get errors from nowhere) I need help}
 */
-
-const { execQuery, execSqlFile, connection } = require('./mainFIle');
-const DB = require('./mainFIle');
+//const { execQuery, execSqlFile } = require('./mainFile');
 
 const joinQueries = async () => {
     try {

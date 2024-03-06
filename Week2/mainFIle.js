@@ -16,6 +16,7 @@ const DB = mysql.createConnection({
 const readFile = util.promisify(fs.readFile);
 const execQuery = util.promisify(DB.query).bind(DB);
 const connectDB = util.promisify(DB.connect).bind(DB);
+const endDB = util.promisify(DB.end).bind(DB);
 
 //connect func
 const connection = async () => {
@@ -31,11 +32,11 @@ const connection = async () => {
 };
 
 //extra func to drop and create a db //it was an attempt to fix a problem in file2
-//const dbFunc = async () => {
-//  await execQuery('DROP DATABASE IF EXISTS eduDB');
-//await execQuery('CREATE DATABASE IF NOT EXISTS eduDB');
-// await execQuery('Use eduDB');
-//};
+const dbFunc = async () => {
+    await execQuery('DROP DATABASE IF EXISTS eduDB');
+    await execQuery('CREATE DATABASE IF NOT EXISTS eduDB');
+    await execQuery('Use eduDB');
+};
 
 //execute files func
 const execSqlFile = async (fileName) => {
@@ -47,8 +48,17 @@ const execSqlFile = async (fileName) => {
         //to execute multiple queries in the same files
         const queries = sqlData.split(';').filter(query => query.trim() !== '');
 
+
+        let count = 1;
         for (const query of queries) {
-            await execQuery(query);
+            try {
+                // Execute the query
+                const result = await execQuery(query);
+                console.log(`QUERY ${count++}:`, result);
+            } catch (e) {
+                // Handle query execution errors
+                console.error(`Error executing query ${count}: ${e.message}`);
+            }
         }
 
 
@@ -62,18 +72,21 @@ const execSqlFile = async (fileName) => {
 //main func
 const main = async () => {
     try { //connection+ files(db,data,queries) + endConnection 
-        // await dbFunc();
+
         await connection();
 
+        await dbFunc();
 
         await execSqlFile('edu_db.sql');
         await execSqlFile('edu_data.sql');
         await execSqlFile('edu_queries.sql');
 
-        DB.end();
+        await endDB();
+
 
     } catch (err) {
-        throw err;
+        console.error(err);
+        process.exit(1);
     }
 };
 
@@ -86,6 +99,4 @@ main();
 module.exports = {
     execQuery,
     execSqlFile,
-
-};
-*/
+};*/

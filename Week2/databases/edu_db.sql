@@ -1,10 +1,7 @@
 -- CREATE DATABASE IF NOT EXISTS eduDB;
-DROP DATABASE IF EXISTS eduDB;
-
-CREATE DATABASE IF NOT EXISTS eduDB;
-
-USE eduDB;
-
+-- DROP DATABASE IF EXISTS eduDB;
+-- CREATE DATABASE IF NOT EXISTS eduDB;
+-- USE eduDB;
 -- AUTHORS TABLE
 CREATE TABLE IF NOT EXISTS authors (
     author_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -12,8 +9,14 @@ CREATE TABLE IF NOT EXISTS authors (
     university VARCHAR(255),
     date_of_birth DATE,
     h_index INT,
-    gender CHAR(1)
+    gender CHAR(1),
+    mentor INT,
+    CONSTRAINT check_gender CHECK (gender IN ('M', 'F', 'O')),
+    FOREIGN KEY (mentor) REFERENCES authors (author_id)
 );
+
+-- ADD a FK CONSTRAINT to mentor column referencing to (author_id)
+ALTER TABLE authors ADD CONSTRAINT fk_mentor FOREIGN KEY (mentor) REFERENCES authors (author_id);
 
 -- RESEARCH_PAPERS TABLE
 CREATE TABLE IF NOT EXISTS research_Papers (
@@ -34,7 +37,7 @@ CREATE TABLE IF NOT EXISTS authors_papers (
 );
 
 -- Add "mentor" column to "authors" table
-ALTER TABLE authors
-ADD COLUMN mentor INT,
+-- ALTER TABLE authors
+-- ADD COLUMN mentor INT
 -- Add a foreign key constraint to the 'mentor' column, referencing the author_id
-ADD CONSTRAINT fk_mentor FOREIGN KEY (mentor) REFERENCES authors (author_id);
+-- ADD CONSTRAINT fk_mentor FOREIGN KEY (mentor) REFERENCES authors (author_id);
