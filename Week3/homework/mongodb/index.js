@@ -134,11 +134,11 @@ async function main() {
             `You did not set up the environment variables correctly. Did you create a '.env' file and add a package to create it?`
         );
     }
-    const client = new MongoClient(process.env.MONGODB_URL, {
+    const client = new MongoClient(process.env.MONGODB_URL/*, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         serverApi: ServerApiVersion.v1,
-    });
+    }*/);
 
     try {
         await client.connect();
