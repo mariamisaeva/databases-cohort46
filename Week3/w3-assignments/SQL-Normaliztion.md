@@ -1,6 +1,6 @@
 1. What columns violate 1NF?
 
-food_code & food_description
+food_code, food_description & dinner_date
 Because they contain multiple values.
 
 2. What entities do you recognize that could be extracted?
@@ -14,11 +14,11 @@ Because they contain multiple values.
 
 Tables:
 
-- Member: member_id, member_name, member_address.
+- Member: member_id(PK), member_name, member_address.
 
-- Food : food_code, food_description.
+- Food : food_code(PK), food_description.
 
-- Dinner : dinner_id, dinner_date.
+- Dinner : dinner_id, dinner_date, member_id(FK), venue_code
 
 - Venue : venue_code, venue_description.
 
