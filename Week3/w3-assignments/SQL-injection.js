@@ -7,7 +7,7 @@ function getPopulation(Country, name, code, cb) {
         function (err, result) {
             if (err) cb(err);
             if (result.length == 0) cb(new Error("Not found"));
-            cb(null, result[0].name);
+            cb(null, result[0].Population);
         }
     );
 }
