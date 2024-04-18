@@ -51,7 +51,7 @@ const ConInfoByYearAge = async (collection, year, age) => {
     const pipeline = [
         { //match stage
             $match: {
-                Year: 2020, Age: "100+"
+                Year: year, Age: age
             }
         },
         {  //addFields stage
@@ -94,7 +94,7 @@ async function main() {
 
         //Invoke totalPopulationByYear 
         const countryName = "Netherlands";
-        //  await totalPopulationByYear(collection, countryName);
+        await totalPopulationByYear(collection, countryName);
 
         //Invoke ConInfoByYearAge
         await ConInfoByYearAge(collection, 2020, "100+");
